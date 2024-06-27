@@ -14,13 +14,30 @@ test("logging format", () => {
   logger.info("logging info");
 });
 
-test("logging format custom", () => {
+test("logging custom format", () => {
   // object logger
   const logger = winston.createLogger({
     transports: [new winston.transports.Console({})], // console transport
     format: winston.format.printf((log) => {
       return `${new Date()} | ${log.level.toUpperCase()}: ${log.message}`;
     }), // format logger
+    level: "info", // level logger
+  });
+
+  logger.error("logging error");
+  logger.warn("logging warn");
+  logger.info("logging info");
+});
+
+test("logging combine format", () => {
+  // object logger
+  const logger = winston.createLogger({
+    transports: [new winston.transports.Console({})], // console transport
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.ms(),
+      winston.format.simple()
+    ), // format logger
     level: "info", // level logger
   });
 
